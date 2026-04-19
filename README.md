@@ -1,5 +1,3 @@
-![ImpactPulse Banner](./assets/main-banner.png)
-
 # 🚀 ImpactPulse
 ### *Smart Relief System*
 
