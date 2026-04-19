@@ -1,7 +1,7 @@
 # 🚀 ImpactPulse
 ### *Smart Relief System*
 
-![ImpactPulse Preview](file:///C:/Users/chara/.gemini/antigravity/brain/ecee9e5e-0943-419b-b911-085d7cc94395/impactpulse_hero_screenshot_1776579841515.png)
+![ImpactPulse Preview](./assets/hero-preview.png)
 
 ---
 
