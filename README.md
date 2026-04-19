@@ -1,7 +1,15 @@
+![ImpactPulse Banner](./assets/main-banner.png)
+
 # 🚀 ImpactPulse
 ### *Smart Relief System*
 
-![ImpactPulse Preview](./assets/hero-preview.png)
+[![Built with React](https://img.shields.io/badge/Built%20with-React-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
+[![Firebase](https://img.shields.io/badge/Backend-Firebase-FFCA28?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
+[![Vite](https://img.shields.io/badge/Build%20Tool-Vite-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev/)
+[![Zustand](https://img.shields.io/badge/State-Zustand-orange?style=for-the-badge)](https://github.com/pmndrs/zustand)
+[![Hackathon](https://img.shields.io/badge/Hackathon-Hack2Skill-blueviolet?style=for-the-badge)](https://hack2skill.com/)
+
+![Interface Preview](./assets/hero-preview.png)
 
 ---
 
