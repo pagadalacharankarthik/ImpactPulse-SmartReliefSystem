@@ -1,0 +1,46 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // --- Helper Functions ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isSignedIn() && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // --- User Profiles ---
+    // Anyone signed in can read profiles. Users can create/update their own pending profile.
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // --- Tasks & Missions ---
+    // Anyone signed in can view tasks. Admins can manage everything.
+    match /tasks/{taskId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // --- Ground Surveys ---
+    // Workers can submit. Admins can view and manage.
+    match /surveys/{surveyId} {
+      allow create: if isSignedIn();
+      allow read, delete: if isAdmin();
+      allow update: if false; // Surveys are immutable field reports
+    }
+
+    // --- Organizations ---
+    // Public structure, Admin managed.
+    match /organizations/{orgId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}
