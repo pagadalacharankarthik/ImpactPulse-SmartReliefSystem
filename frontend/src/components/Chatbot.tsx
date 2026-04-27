@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Bot, Loader2, Sparkles } from 'lucide-react';
 import { getAIResponse, type ChatMessage } from '../services/geminiService';
 import { useDatabaseStore } from '../store/useDatabaseStore';
@@ -11,7 +11,7 @@ export const Chatbot = () => {
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   
-  const { tasks, surveys, users, organizations } = useDatabaseStore();
+  const { tasks, surveys, organizations } = useDatabaseStore();
 
   // Prepare context data for Gemini
   const getContextData = () => {
