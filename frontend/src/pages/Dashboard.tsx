@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useDatabaseStore } from '../store/useDatabaseStore';
 import type { UserRecord } from '../store/useDatabaseStore';
 import { useToastStore } from '../store/useToastStore';
+import { Chatbot } from '../components/Chatbot';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -1154,6 +1155,7 @@ export const Dashboard = () => {
         })()}
       </Modal>
 
+      <Chatbot />
     </div>
   );
 };
