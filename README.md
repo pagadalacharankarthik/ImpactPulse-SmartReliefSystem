@@ -5,6 +5,7 @@
 [![Firebase](https://img.shields.io/badge/Backend-Firebase-FFCA28?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
 [![Vite](https://img.shields.io/badge/Build%20Tool-Vite-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev/)
 [![Zustand](https://img.shields.io/badge/State-Zustand-orange?style=for-the-badge)](https://github.com/pmndrs/zustand)
+[![Gemini](https://img.shields.io/badge/AI-Google%20Gemini-blue?style=for-the-badge&logo=google-gemini)](https://ai.google.dev/)
 [![Hackathon](https://img.shields.io/badge/Hackathon-Hack2Skill-blueviolet?style=for-the-badge)](https://hack2skill.com/)
 
 ![Interface Preview](./assets/hero-preview.png)
@@ -37,6 +38,9 @@ The app highlights areas on the map that have zero help on the way. This makes s
 
 ### 📈 Impact Scoring
 A simple live chart shows the "Recovery Rate"—how many people have been rescued vs. how many still need help.
+
+### 🤖 AI Intelligence Feed (Chatbot)
+A smart AI assistant powered by **Google Gemini** that reads live dashboard data. It helps admins summarize reports, prioritize urgent tasks, and decide where to send volunteers instantly.
 
 ---
 
@@ -76,6 +80,7 @@ ImpactPulse/
 | Job | Technology We Used |
 | :--- | :--- |
 | **Frontend** | React & Vite (for speed) |
+| **AI Intelligence** | Google Gemini API (for smart decisions) |
 | **Database** | Google Cloud Firestore (for syncing) |
 | **Offline Storage** | IndexedDB (to work without internet) |
 | **Security** | Google Login (to keep accounts safe) |
