@@ -4,14 +4,12 @@
  * Provides smart, data-driven responses for a perfect demo.
  */
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-
 export interface ChatMessage {
   role: 'user' | 'model';
   parts: { text: string }[];
 }
 
-export const getAIResponse = async (prompt: string, dashboardData: string, history: ChatMessage[] = []) => {
+export const getAIResponse = async (prompt: string, dashboardData: string, _history: ChatMessage[] = []) => {
   // We are forcing Mock Mode for maximum stability during the presentation
   return simulateAIResponse(prompt, dashboardData);
 };
