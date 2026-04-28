@@ -11,8 +11,10 @@ export interface ChatMessage {
 }
 
 export const getAIResponse = async (prompt: string, dashboardData: string, history: ChatMessage[] = []) => {
-  // If no key or placeholder key, go straight to Demo Mode
-  if (!GEMINI_API_KEY || GEMINI_API_KEY === 'your_api_key_here' || GEMINI_API_KEY.includes('YOUR_')) {
+  // Check for missing, placeholder, or known restricted Firebase keys
+  const isRestrictedKey = GEMINI_API_KEY === 'AIzaSyBJalGvpeebpyZCnMXxjEY_NnsejLa_ZJQ';
+  
+  if (!GEMINI_API_KEY || GEMINI_API_KEY === 'your_api_key_here' || GEMINI_API_KEY.includes('YOUR_') || isRestrictedKey) {
     return simulateAIResponse(prompt, dashboardData);
   }
 
