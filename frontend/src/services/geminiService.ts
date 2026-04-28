@@ -1,6 +1,7 @@
 /**
- * Gemini AI Service - Hackathon Bulletproof Version
- * Uses real AI if available, fallbacks to "Demo Mode" if keys fail.
+ * Gemini AI Service - REAL AI VERSION
+ * Primary: Real Gemini 1.5 Flash
+ * Fallback: Silent Demo Mode (only if API fails)
  */
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
@@ -11,14 +12,13 @@ export interface ChatMessage {
 }
 
 export const getAIResponse = async (prompt: string, dashboardData: string, history: ChatMessage[] = []) => {
-  // Check for missing, placeholder, or known restricted Firebase keys
-  const isRestrictedKey = GEMINI_API_KEY === 'AIzaSyBJalGvpeebpyZCnMXxjEY_NnsejLa_ZJQ';
-  
-  if (!GEMINI_API_KEY || GEMINI_API_KEY === 'your_api_key_here' || GEMINI_API_KEY.includes('YOUR_') || isRestrictedKey) {
+  // If key is missing or placeholder, use simulation
+  if (!GEMINI_API_KEY || GEMINI_API_KEY === 'your_api_key_here' || GEMINI_API_KEY.includes('YOUR_')) {
     return simulateAIResponse(prompt, dashboardData);
   }
 
-  const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+  // REAL AI ENDPOINT (Stable v1)
+  const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
   try {
     const response = await fetch(API_URL, {
@@ -29,64 +29,38 @@ export const getAIResponse = async (prompt: string, dashboardData: string, histo
           ...history,
           {
             role: "user",
-            parts: [{ text: `You are an NGO assistant.\nData: ${dashboardData}\n\nQuestion: ${prompt}` }]
+            parts: [{ text: `You are an NGO assistant for ImpactPulse. Answer based on this dashboard data: ${dashboardData}\n\nUser: ${prompt}` }]
           }
         ],
-        generationConfig: { temperature: 0.7, maxOutputTokens: 300 }
+        generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
       }),
     });
 
-    if (!response.ok) {
-      // If it's a 404 or 403, it's likely a key issue, fallback silently
+    if (response.ok) {
+      const data = await response.json();
+      return data.candidates[0].content.parts[0].text;
+    } else {
+      // If Google rejects the key/model, use the smart simulation so the demo doesn't break
+      const err = await response.json();
+      console.warn("Real AI rejected request:", err.error?.message);
       return simulateAIResponse(prompt, dashboardData);
     }
-
-    const data = await response.json();
-    return data.candidates[0].content.parts[0].text;
   } catch (error) {
-    // Silent fallback for hackathon stability
     return simulateAIResponse(prompt, dashboardData);
   }
 };
 
 /**
- * SIMULATED AI (Hackathon Demo Mode)
- * Dynamically reads the current dashboard data to give a "Real" feeling answer.
+ * SMART SIMULATION (Fallback)
  */
 const simulateAIResponse = (prompt: string, data: string) => {
   const query = prompt.toLowerCase();
-  
-  // Extract real numbers from the local data string for realism
-  const taskCount = data.match(/Tasks:\s*(\d+)/)?.[1] || "some";
-  const priorityCount = data.match(/High Priority:\s*(\d+)/)?.[1] || "0";
-  const peopleCount = data.match(/Affected:\s*(\d+)/)?.[1] || "many";
-  const orgCount = data.match(/Organizations:\s*(\d+)/)?.[1] || "several";
+  const taskCount = data.match(/Tasks:\s*(\d+)/)?.[1] || "5";
+  const priorityCount = data.match(/High Priority:\s*(\d+)/)?.[1] || "2";
 
-  // 1. URGENT / PRIORITY
-  if (query.includes('urgent') || query.includes('priority') || query.includes('critical') || query.includes('severity')) {
-    return `Analysis complete. We currently have ${priorityCount} critical alerts. Based on the "Smart Priority" engine, the North and East districts are showing the highest impact. I recommend prioritizing the relief missions in those sectors first.`;
+  if (query.includes('urgent') || query.includes('priority')) {
+    return `[Real AI Pending Key Approval] Based on local metrics, we have ${priorityCount} High Priority tasks. I recommend focusing on the emergency reports first.`;
   }
   
-  // 2. SUMMARY / DATA / STATS
-  if (query.includes('summarize') || query.includes('report') || query.includes('data') || query.includes('stats')) {
-    return `Current Impact Snapshot: We are coordinating ${taskCount} active missions through ${orgCount} organizations. We've reached approximately ${peopleCount} individuals. The overall recovery rate is trending upwards, but volunteer allocation in remote zones remains a key bottleneck.`;
-  }
-
-  // 3. VOLUNTEERS / WORKERS
-  if (query.includes('volunteer') || query.includes('worker') || query.includes('people')) {
-    return `We have a dedicated team currently assigned to ${taskCount} tasks. If you need more hands on the ground, I recommend checking the "Pending Approval" tab for new volunteer registrations from the last 24 hours.`;
-  }
-
-  // 4. LOCATIONS / MAP
-  if (query.includes('where') || query.includes('location') || query.includes('area') || query.includes('map')) {
-    return `The interactive map is showing concentrated activity in the South and North districts. There are currently some 'Forgotten Zones' in the rural East sector where we have zero active missions—we should deploy a survey team there immediately.`;
-  }
-
-  // 5. GREETINGS / HELLO
-  if (query.includes('hello') || query.includes('hi') || query.includes('who are you')) {
-    return "Hello! I am the Impact Intelligence assistant. I'm currently monitoring the live feed from your local database. I can help you summarize reports, find urgent tasks, or analyze location data. What's our focus for today?";
-  }
-
-  // 6. DEFAULT FALLBACK
-  return `I've processed your query about "${prompt}". I'm currently tracking ${taskCount} active relief tasks and ${priorityCount} red alerts in the system. Would you like a detailed breakdown of the highest priority mission?`;
+  return `[Real AI Pending Key Approval] I'm monitoring ${taskCount} active missions. Please provide a valid Gemini API key from AI Studio to enable full brain reasoning!`;
 };
